@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:notes/data/note_provider.dart';
 import 'package:notes/pages/add_note.dart';
 import 'package:notes/pages/auth_page.dart';
 import 'package:notes/pages/notes_page.dart';
 import 'firebase_options.dart';
 import 'package:notes/pages/login_page.dart';
 import 'package:notes/pages/signup_page.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MainApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => NotesProvider(),
+        ),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {

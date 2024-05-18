@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:notes/data/note_class.dart';
 
 class NotesProvider with ChangeNotifier {
-  NotesProvider() {
-    _fetchNotes();
-  }
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List<Note> _notes = [];
+  List<Note> _notes = [
+    // Note(title: 'MyNotes', content: 'Welcome to My Notes app.'),
+  ];
 
   List<Note> get notes => _notes;
 
-  Future<void> _fetchNotes() async {
+  Future<void> fetchNotes() async {
     try {
       QuerySnapshot querySnapshot =
           await firestore.collection('UserData').get();
@@ -25,10 +24,6 @@ class NotesProvider with ChangeNotifier {
     } catch (e) {
       print('Error fetching notes: $e');
     }
-
-    if (_notes.isEmpty) {
-      _initialNotes();
-    }
   }
 
   void addNote(Note note) {
@@ -39,11 +34,5 @@ class NotesProvider with ChangeNotifier {
   void removeNoteAt(int index) {
     _notes.removeAt(index);
     notifyListeners();
-  }
-
-  void _initialNotes() {
-    _notes = [
-      Note(title: 'MyNotes', content: 'Welcome to My Notes app.'),
-    ];
   }
 }

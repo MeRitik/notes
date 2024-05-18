@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notes/components/my_notestile.dart';
-import 'package:notes/data/note_class.dart';
+import 'package:notes/data/note_provider.dart';
+import 'package:provider/provider.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});
@@ -12,15 +12,9 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List<Note> _notes = [];
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final notes = context.watch<NotesProvider>().notes;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notes App'),
@@ -34,9 +28,9 @@ class _NotesPageState extends State<NotesPage> {
         backgroundColor: Colors.blueGrey.shade100,
       ),
       body: ListView.builder(
-        itemCount: _notes.length,
+        itemCount: notes.length,
         itemBuilder: (context, index) {
-          final note = _notes[index];
+          final note = notes[index];
           return MyNotesTile(
             subject: note.title,
             note: note.content,
